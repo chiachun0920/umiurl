@@ -1,0 +1,348 @@
+openapi: 3.0.3
+info:
+  title: umiurl Short URL API
+  version: 1.0.0
+  description: API contract for short URL creation, redirect/preview behavior, analytics, and conversion attribution.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+tags:
+  - name: URLs
+    description: Short URL creation, redirect, preview, and analytics
+  - name: Conversions
+    description: Conversion attribution events
+paths:
+  /urls:
+    post:
+      tags:
+        - URLs
+      summary: Create a short URL
+      operationId: createShortURL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateURLRequest'
+            examples:
+              default:
+                value:
+                  url: https://example.com/article
+                  referral_code: user_001
+                  campaign: spring
+      responses:
+        '201':
+          description: Short URL created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateURLResponse'
+        '400':
+          description: Invalid JSON body or URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Creation failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /{code}:
+    get:
+      tags:
+        - URLs
+      summary: Resolve a short URL
+      description: Normal users receive a 302 redirect. Social crawler user agents receive Open Graph HTML.
+      operationId: resolveShortURL
+      parameters:
+        - $ref: '#/components/parameters/Code'
+        - name: User-Agent
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Used to detect social crawlers.
+        - name: Referer
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Used for platform attribution.
+        - name: X-Country
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Optional country code for analytics attribution.
+      responses:
+        '200':
+          description: Social crawler preview HTML.
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: Redirect to the original URL.
+          headers:
+            Location:
+              description: Original long URL.
+              schema:
+                type: string
+                format: uri
+        '404':
+          description: Short URL not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Resolve failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /urls/{code}/analytics:
+    get:
+      tags:
+        - URLs
+      summary: Get analytics for a short URL
+      operationId: getURLAnalytics
+      parameters:
+        - $ref: '#/components/parameters/Code'
+      responses:
+        '200':
+          description: Analytics summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsSummary'
+        '404':
+          description: Short URL not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Analytics lookup failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /conversions:
+    post:
+      tags:
+        - Conversions
+      summary: Record a conversion
+      operationId: recordConversion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversionRequest'
+            examples:
+              default:
+                value:
+                  code: OgV3F1L
+                  value: 42.5
+      responses:
+        '201':
+          description: Conversion recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionResponse'
+        '400':
+          description: Invalid JSON body or missing code.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Short URL not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Conversion recording failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  parameters:
+    Code:
+      name: code
+      in: path
+      required: true
+      description: Seven-character base62 short code.
+      schema:
+        type: string
+        pattern: '^[0-9A-Za-z]{7}$'
+        example: OgV3F1L
+  schemas:
+    CreateURLRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://example.com/article
+        referral_code:
+          type: string
+          example: user_001
+        campaign:
+          type: string
+          example: spring
+    CreateURLResponse:
+      type: object
+      required:
+        - code
+        - short_url
+        - url
+        - preview
+      properties:
+        code:
+          type: string
+          pattern: '^[0-9A-Za-z]{7}$'
+          example: OgV3F1L
+        short_url:
+          type: string
+          format: uri
+          example: http://localhost:8080/OgV3F1L
+        url:
+          type: string
+          format: uri
+          example: https://example.com/article
+        referral_code:
+          type: string
+          example: user_001
+        campaign:
+          type: string
+          example: spring
+        preview:
+          $ref: '#/components/schemas/Preview'
+    Preview:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          example: Example Domain
+        description:
+          type: string
+          example: A short description for social preview.
+        image_url:
+          type: string
+          format: uri
+          example: https://example.com/preview.png
+    ConversionRequest:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          pattern: '^[0-9A-Za-z]{7}$'
+          example: OgV3F1L
+        referral_code:
+          type: string
+          description: Optional override; defaults to the short URL referral code when omitted.
+          example: user_001
+        campaign:
+          type: string
+          description: Optional override; defaults to the short URL campaign when omitted.
+          example: spring
+        value:
+          type: number
+          format: double
+          example: 42.5
+    ConversionResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: created
+    AnalyticsSummary:
+      type: object
+      required:
+        - code
+        - total_clicks
+        - total_conversions
+      properties:
+        code:
+          type: string
+          example: OgV3F1L
+        total_clicks:
+          type: integer
+          format: int64
+          example: 12
+        total_conversions:
+          type: integer
+          format: int64
+          example: 3
+        clicks_by_referral:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        clicks_by_campaign:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        clicks_by_platform:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        clicks_by_device:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        clicks_by_country:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        conversions_by_referral:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+        conversions_by_campaign:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Breakdown'
+    Breakdown:
+      type: object
+      required:
+        - key
+        - count
+      properties:
+        key:
+          type: string
+          example: user_001
+        count:
+          type: integer
+          format: int64
+          example: 7
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: short url not found
