@@ -120,7 +120,7 @@ make swagger
 
 ## Contributor Docs
 
-New contributors should start with [Architecture and Business Guide](docs/architecture.md). It explains the business concepts, request flows, clean architecture layout, data model, and where to make common changes.
+New contributors should start with [Architecture and Business Guide](docs/architecture.md). For deeper details, read [Data Models](docs/data-models.md), [Database Tables](docs/database-tables.md), and [Usecase Flows](docs/usecase-flows.md).
 
 ## Development
 
