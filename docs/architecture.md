@@ -26,6 +26,8 @@ Key terms:
 
 See the machine-readable API contract in [openapi.yaml](openapi.yaml).
 
+For deeper implementation details, see [Data Models](data-models.md), [Database Tables](database-tables.md), and [Usecase Flows](usecase-flows.md).
+
 ## Architecture Overview
 
 The project follows a clean architecture layout:
@@ -73,6 +75,8 @@ Schema lives in [001_init.sql](../migrations/001_init.sql).
 - `conversion_events`: one row per conversion with referral/campaign and optional numeric value.
 
 Analytics are calculated from event tables and returned by `GET /urls/{code}/analytics`.
+
+For field-by-field details, see [Data Models](data-models.md) and [Database Tables](database-tables.md).
 
 ## How To Contribute
 
