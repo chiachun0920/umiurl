@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -46,6 +47,24 @@ func main() {
 	e.HideBanner = true
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: parseCSVEnv("CORS_ALLOW_ORIGINS", []string{"*"}),
+		AllowMethods: []string{
+			echo.GET,
+			echo.POST,
+			echo.OPTIONS,
+		},
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			echo.HeaderAuthorization,
+			"User-Agent",
+			"X-Country",
+			"CF-IPCountry",
+			"CloudFront-Viewer-Country",
+		},
+	}))
 
 	controller := registry.NewController(pool, baseURL)
 	controller.Register(e)
@@ -53,4 +72,24 @@ func main() {
 	if err := e.Start(":" + port); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func parseCSVEnv(key string, fallback []string) []string {
+	value := os.Getenv(key)
+	if strings.TrimSpace(value) == "" {
+		return fallback
+	}
+
+	parts := strings.Split(value, ",")
+	result := make([]string, 0, len(parts))
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part != "" {
+			result = append(result, part)
+		}
+	}
+	if len(result) == 0 {
+		return fallback
+	}
+	return result
 }

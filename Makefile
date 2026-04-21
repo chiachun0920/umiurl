@@ -1,12 +1,13 @@
 DATABASE_URL ?= postgres://umiurl:umiurl@localhost:5433/umiurl?sslmode=disable
-APP_BASE_URL ?= http://localhost:8080
+APP_BASE_URL ?=  https://b732eaa7dbc0.ngrok.app
 PORT ?= 8080
+CORS_ALLOW_ORIGINS ?= *
 GOCACHE ?= /tmp/umiurl-gocache
 
 .PHONY: start test build db-up migrate swagger
 
 start:
-	DATABASE_URL="$(DATABASE_URL)" APP_BASE_URL="$(APP_BASE_URL)" PORT="$(PORT)" GOCACHE="$(GOCACHE)" go run ./cmd/api
+	DATABASE_URL="$(DATABASE_URL)" APP_BASE_URL="$(APP_BASE_URL)" PORT="$(PORT)" CORS_ALLOW_ORIGINS="$(CORS_ALLOW_ORIGINS)" GOCACHE="$(GOCACHE)" go run ./cmd/api
 
 test:
 	GOCACHE="$(GOCACHE)" go test ./...
