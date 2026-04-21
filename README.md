@@ -118,6 +118,10 @@ Check that the file exists with:
 make swagger
 ```
 
+## Contributor Docs
+
+New contributors should start with [Architecture and Business Guide](docs/architecture.md). It explains the business concepts, request flows, clean architecture layout, data model, and where to make common changes.
+
 ## Development
 
 ```sh
