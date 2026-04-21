@@ -54,6 +54,56 @@ View analytics:
 curl http://localhost:8080/urls/{code}/analytics
 ```
 
+## API Usage Scenarios
+
+### 1. User creates a short URL
+
+The frontend sends the original URL to the API. The API fetches preview metadata, creates a 7-character short code, stores referral/campaign data, and returns the short URL.
+
+```sh
+curl -X POST http://localhost:8080/urls \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://www.youtube.com/watch?v=BkszA-MvjXA","referral_code":"user_001","campaign":"launch"}'
+```
+
+Use `short_url` from the response as the shareable link.
+
+### 2. User opens the short URL
+
+A normal browser visit redirects to the original URL with `302`. The API records a click event for analytics.
+
+```sh
+curl -i http://localhost:8080/{code}
+```
+
+### 3. Social platform crawls the short URL
+
+When Facebook, Threads, Slack, or another crawler visits the short URL, the API returns HTML with Open Graph tags instead of redirecting. This lets the platform show title, description, and image preview.
+
+```sh
+curl -H 'User-Agent: facebookexternalhit/1.1' http://localhost:8080/{code}
+```
+
+### 4. User completes a conversion
+
+After the user performs a target action, such as signup or purchase, the frontend/backend records a conversion with the short code.
+
+```sh
+curl -X POST http://localhost:8080/conversions \
+  -H 'Content-Type: application/json' \
+  -d '{"code":"{code}","value":99.00}'
+```
+
+If `referral_code` or `campaign` is omitted, the API uses the values stored on the short URL.
+
+### 5. Dashboard reads analytics
+
+The frontend dashboard can fetch click and conversion totals plus breakdowns by referral, campaign, platform, device, and country.
+
+```sh
+curl http://localhost:8080/urls/{code}/analytics
+```
+
 ## API Contract
 
 The Swagger/OpenAPI file for F2E integration is available at:
