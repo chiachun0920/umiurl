@@ -32,6 +32,8 @@ type createURLRequest struct {
 	Campaign     string `json:"campaign"`
 }
 
+type CreateURLRequest = createURLRequest
+
 type createURLResponse struct {
 	Code         string          `json:"code"`
 	ShortURL     string          `json:"short_url"`
@@ -40,6 +42,7 @@ type createURLResponse struct {
 	Campaign     string          `json:"campaign,omitempty"`
 	Preview      previewResponse `json:"preview"`
 }
+type CreateURLResponse = createURLResponse
 
 type previewResponse struct {
 	Title       string `json:"title"`

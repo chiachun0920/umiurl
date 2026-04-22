@@ -9,10 +9,14 @@ GOCACHE ?= /tmp/umiurl-gocache
 start:
 	DATABASE_URL="$(DATABASE_URL)" APP_BASE_URL="$(APP_BASE_URL)" PORT="$(PORT)" CORS_ALLOW_ORIGINS="$(CORS_ALLOW_ORIGINS)" GOCACHE="$(GOCACHE)" go run ./cmd/api
 
-test:
-	GOCACHE="$(GOCACHE)" go test ./...
+test-integration:
+	go test -v -count 1 \
+		-cover -covermode=count -coverpkg=./... \
+		-coverprofile=coverage.out \
+		./testing/integration
+	gcov2lcov -infile=coverage.out -outfile=lcov.info
 
-test-cov:
+test:
 	go test -v -count 1 \
 		-cover -covermode=count -coverpkg=./... \
 		-coverprofile=coverage.out \
