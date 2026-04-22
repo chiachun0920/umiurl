@@ -79,17 +79,30 @@
 !_TAG_ROLE_DESCRIPTION!Go!unknown	receiverType	/receiver type/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	included	/included/
 !_TAG_ROLE_DESCRIPTION!Make!makefile	optional	/optionally included/
+1. User creates a short URL	README.md	/^### 1. User creates a short URL$/;"	S	section:umiurl""API Usage Scenarios
+2. User opens the short URL	README.md	/^### 2. User opens the short URL$/;"	S	section:umiurl""API Usage Scenarios
+3. Social platform crawls the short URL	README.md	/^### 3. Social platform crawls the short URL$/;"	S	section:umiurl""API Usage Scenarios
+4. User completes a conversion	README.md	/^### 4. User completes a conversion$/;"	S	section:umiurl""API Usage Scenarios
+5. Dashboard reads analytics	README.md	/^### 5. Dashboard reads analytics$/;"	S	section:umiurl""API Usage Scenarios
 API Contract	README.md	/^## API Contract$/;"	s	chapter:umiurl
-APP_BASE_URL	Makefile	/^APP_BASE_URL ?= http:\/\/localhost:8080$/;"	m
+API Usage Scenarios	README.md	/^## API Usage Scenarios$/;"	s	chapter:umiurl
+APP_BASE_URL	Makefile	/^APP_BASE_URL ?=  https:\/\/b732eaa7dbc0.ngrok.app$/;"	m
+Analytics	docs/usecase-flows.md	/^## Analytics$/;"	s	chapter:Usecase Flows
 Analytics	internal/usecase/service.go	/^	Analytics   repository.AnalyticsRepository$/;"	m	struct:usecase.NewServiceInput	typeref:typename:repository.AnalyticsRepository
 Analytics	internal/usecase/service.go	/^func (s *Service) Analytics(ctx context.Context, code string) (domain.AnalyticsSummary, error) {$/;"	f	struct:usecase.Service	typeref:typename:(domain.AnalyticsSummary, error)
 AnalyticsRepository	internal/usecase/interface/repository/repositories.go	/^type AnalyticsRepository interface {$/;"	i	package:repository
+AnalyticsSummary	docs/data-models.md	/^## AnalyticsSummary$/;"	s	chapter:Data Models
 AnalyticsSummary	internal/domain/models.go	/^type AnalyticsSummary struct {$/;"	s	package:domain
+Architecture Overview	docs/architecture.md	/^## Architecture Overview$/;"	s	chapter:Architecture and Business Guide
+Architecture and Business Guide	docs/architecture.md	/^# Architecture and Business Guide$/;"	c
 Base62Alphabet	internal/adapter/gateway/base62.go	/^const Base62Alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"$/;"	c	package:gateway
 Base62CodeGenerator	internal/adapter/gateway/base62.go	/^type Base62CodeGenerator struct {$/;"	s	package:gateway
 BaseURL	internal/usecase/service.go	/^	BaseURL     string$/;"	m	struct:usecase.NewServiceInput	typeref:typename:string
+Breakdown	docs/data-models.md	/^## Breakdown$/;"	s	chapter:Data Models
 Breakdown	internal/domain/models.go	/^type Breakdown struct {$/;"	s	package:domain
 Build, Test, and Development Commands	AGENTS.md	/^## Build, Test, and Development Commands$/;"	s	chapter:Repository Guidelines
+Business Overview	docs/architecture.md	/^## Business Overview$/;"	s	chapter:Architecture and Business Guide
+CORS_ALLOW_ORIGINS	Makefile	/^CORS_ALLOW_ORIGINS ?= *$/;"	m
 Campaign	internal/controller/controller.go	/^	Campaign     string          `json:"campaign,omitempty"`$/;"	m	struct:controller.createURLResponse	typeref:typename:string
 Campaign	internal/controller/controller.go	/^	Campaign     string  `json:"campaign"`$/;"	m	struct:controller.conversionRequest	typeref:typename:string
 Campaign	internal/controller/controller.go	/^	Campaign     string `json:"campaign"`$/;"	m	struct:controller.createURLRequest	typeref:typename:string
@@ -99,6 +112,7 @@ Campaign	internal/domain/models.go	/^	Campaign     string$/;"	m	struct:domain.Sh
 Campaign	internal/usecase/service.go	/^	Campaign     string$/;"	m	struct:usecase.CreateShortURLInput	typeref:typename:string
 Campaign	internal/usecase/service.go	/^	Campaign     string$/;"	m	struct:usecase.RecordConversionInput	typeref:typename:string
 Classifier	internal/usecase/service.go	/^	Classifier  port.RequestClassifier$/;"	m	struct:usecase.NewServiceInput	typeref:typename:port.RequestClassifier
+ClickEvent	docs/data-models.md	/^## ClickEvent$/;"	s	chapter:Data Models
 ClickEvent	internal/domain/models.go	/^type ClickEvent struct {$/;"	s	package:domain
 ClickRepository	internal/usecase/interface/repository/repositories.go	/^type ClickRepository interface {$/;"	i	package:repository
 Clicks	internal/usecase/service.go	/^	Clicks      repository.ClickRepository$/;"	m	struct:usecase.NewServiceInput	typeref:typename:repository.ClickRepository
@@ -119,7 +133,10 @@ CodeGenerator	internal/usecase/interface/port/ports.go	/^type CodeGenerator inte
 Codes	internal/usecase/service.go	/^	Codes       port.CodeGenerator$/;"	m	struct:usecase.NewServiceInput	typeref:typename:port.CodeGenerator
 Coding Style & Naming Conventions	AGENTS.md	/^## Coding Style & Naming Conventions$/;"	s	chapter:Repository Guidelines
 Commit & Pull Request Guidelines	AGENTS.md	/^## Commit & Pull Request Guidelines$/;"	s	chapter:Repository Guidelines
+Common Change Examples	docs/architecture.md	/^## Common Change Examples$/;"	s	chapter:Architecture and Business Guide
+Contributor Docs	README.md	/^## Contributor Docs$/;"	s	chapter:umiurl
 Controller	internal/controller/controller.go	/^type Controller struct {$/;"	s	package:controller
+ConversionEvent	docs/data-models.md	/^## ConversionEvent$/;"	s	chapter:Data Models
 ConversionEvent	internal/domain/models.go	/^type ConversionEvent struct {$/;"	s	package:domain
 ConversionRepository	internal/usecase/interface/repository/repositories.go	/^type ConversionRepository interface {$/;"	i	package:repository
 Conversions	internal/usecase/service.go	/^	Conversions repository.ConversionRepository$/;"	m	struct:usecase.NewServiceInput	typeref:typename:repository.ConversionRepository
@@ -135,11 +152,15 @@ Create	internal/adapter/repository/postgres.go	/^func (r *PostgresRepository) Cr
 Create	internal/controller/controller_test.go	/^func (r *controllerMemoryRepo) Create(_ context.Context, shortURL domain.ShortURL) (domain.Short/;"	f	struct:controller.controllerMemoryRepo	typeref:typename:(domain.ShortURL, error)
 Create	internal/usecase/interface/repository/repositories.go	/^	Create(ctx context.Context, shortURL domain.ShortURL) (domain.ShortURL, error)$/;"	n	interface:repository.ShortURLRepository	typeref:typename:(domain.ShortURL, error)
 Create	internal/usecase/service_test.go	/^func (r *memoryRepo) Create(_ context.Context, shortURL domain.ShortURL) (domain.ShortURL, error/;"	f	struct:usecase.memoryRepo	typeref:typename:(domain.ShortURL, error)
+CreateShortURL	docs/usecase-flows.md	/^## CreateShortURL$/;"	s	chapter:Usecase Flows
 CreateShortURL	internal/usecase/service.go	/^func (s *Service) CreateShortURL(ctx context.Context, input CreateShortURLInput) (CreateShortURL/;"	f	struct:usecase.Service	typeref:typename:(CreateShortURLOutput, error)
 CreateShortURLInput	internal/usecase/service.go	/^type CreateShortURLInput struct {$/;"	s	package:usecase
 CreateShortURLOutput	internal/usecase/service.go	/^type CreateShortURLOutput struct {$/;"	s	package:usecase
 CreatedAt	internal/domain/models.go	/^	CreatedAt    time.Time$/;"	m	struct:domain.ShortURL	typeref:typename:time.Time
 DATABASE_URL	Makefile	/^DATABASE_URL ?= postgres:\/\/umiurl:umiurl@localhost:5433\/umiurl?sslmode=disable$/;"	m
+Data Model	docs/architecture.md	/^## Data Model$/;"	s	chapter:Architecture and Business Guide
+Data Models	docs/data-models.md	/^# Data Models$/;"	c
+Database Tables	docs/database-tables.md	/^# Database Tables$/;"	c
 DefaultCollisionRetries	internal/usecase/service.go	/^const DefaultCollisionRetries = 5$/;"	c	package:usecase
 Description	internal/controller/controller.go	/^	Description string `json:"description"`$/;"	m	struct:controller.previewResponse	typeref:typename:string
 Description	internal/domain/models.go	/^	Description string$/;"	m	struct:domain.PreviewMetadata	typeref:typename:string
@@ -170,9 +191,11 @@ GetByCode	internal/usecase/interface/repository/repositories.go	/^	GetByCode(ctx
 GetByCode	internal/usecase/service_test.go	/^func (r *memoryRepo) GetByCode(_ context.Context, code string) (domain.ShortURL, bool, error) {$/;"	f	struct:usecase.memoryRepo	typeref:typename:(domain.ShortURL, bool, error)
 HTTPMetadataFetcher	internal/adapter/gateway/metadata.go	/^type HTTPMetadataFetcher struct {$/;"	s	package:gateway
 Headers	internal/usecase/service.go	/^	Headers   map[string]string$/;"	m	struct:usecase.ResolveInput	typeref:typename:map[string]string
+How To Contribute	docs/architecture.md	/^## How To Contribute$/;"	s	chapter:Architecture and Business Guide
 ID	internal/domain/models.go	/^	ID           int64$/;"	m	struct:domain.ShortURL	typeref:typename:int64
 ImageURL	internal/controller/controller.go	/^	ImageURL    string `json:"image_url,omitempty"`$/;"	m	struct:controller.previewResponse	typeref:typename:string
 ImageURL	internal/domain/models.go	/^	ImageURL    string$/;"	m	struct:domain.PreviewMetadata	typeref:typename:string
+Important Design Decisions	docs/architecture.md	/^## Important Design Decisions$/;"	s	chapter:Architecture and Business Guide
 IsCrawler	internal/adapter/gateway/classifier.go	/^func (SimpleRequestClassifier) IsCrawler(userAgent string) bool {$/;"	f	struct:gateway.SimpleRequestClassifier	typeref:typename:bool
 IsCrawler	internal/controller/controller_test.go	/^func (controllerClassifier) IsCrawler(userAgent string) bool {$/;"	f	struct:controller.controllerClassifier	typeref:typename:bool
 IsCrawler	internal/usecase/interface/port/ports.go	/^	IsCrawler(userAgent string) bool$/;"	n	interface:port.RequestClassifier	typeref:typename:bool
@@ -205,6 +228,7 @@ Platform	internal/usecase/service_test.go	/^func (testClassifier) Platform(_, re
 PostgresRepository	internal/adapter/repository/postgres.go	/^type PostgresRepository struct {$/;"	s	package:repository
 Preview	internal/controller/controller.go	/^	Preview      previewResponse `json:"preview"`$/;"	m	struct:controller.createURLResponse	typeref:typename:previewResponse
 Preview	internal/domain/models.go	/^	Preview      PreviewMetadata$/;"	m	struct:domain.ShortURL	typeref:typename:PreviewMetadata
+PreviewMetadata	docs/data-models.md	/^## PreviewMetadata$/;"	s	chapter:Data Models
 PreviewMetadata	internal/domain/models.go	/^type PreviewMetadata struct {$/;"	s	package:domain
 Project Structure & Module Organization	AGENTS.md	/^## Project Structure & Module Organization$/;"	s	chapter:Repository Guidelines
 RealClock	internal/adapter/gateway/clock.go	/^type RealClock struct{}$/;"	s	package:gateway
@@ -212,6 +236,7 @@ Record	internal/adapter/repository/postgres.go	/^func (r *PostgresRepository) Re
 Record	internal/controller/controller_test.go	/^func (r *controllerMemoryRepo) Record(_ context.Context, event domain.ClickEvent) error {$/;"	f	struct:controller.controllerMemoryRepo	typeref:typename:error
 Record	internal/usecase/interface/repository/repositories.go	/^	Record(ctx context.Context, event domain.ClickEvent) error$/;"	n	interface:repository.ClickRepository	typeref:typename:error
 Record	internal/usecase/service_test.go	/^func (r *memoryRepo) Record(_ context.Context, event domain.ClickEvent) error {$/;"	f	struct:usecase.memoryRepo	typeref:typename:error
+RecordConversion	docs/usecase-flows.md	/^## RecordConversion$/;"	s	chapter:Usecase Flows
 RecordConversion	internal/adapter/repository/postgres.go	/^func (r *PostgresRepository) RecordConversion(ctx context.Context, event domain.ConversionEvent)/;"	f	struct:repository.PostgresRepository	typeref:typename:error
 RecordConversion	internal/controller/controller_test.go	/^func (r *controllerMemoryRepo) RecordConversion(context.Context, domain.ConversionEvent) error {$/;"	f	struct:controller.controllerMemoryRepo	typeref:typename:error
 RecordConversion	internal/usecase/interface/repository/repositories.go	/^	RecordConversion(ctx context.Context, event domain.ConversionEvent) error$/;"	n	interface:repository.ConversionRepository	typeref:typename:error
@@ -230,13 +255,17 @@ ReferralCode	internal/usecase/service.go	/^	ReferralCode string$/;"	m	struct:use
 Register	internal/controller/controller.go	/^func (c *Controller) Register(e *echo.Echo) {$/;"	f	struct:controller.Controller
 Repository Guidelines	AGENTS.md	/^# Repository Guidelines$/;"	c
 RequestClassifier	internal/usecase/interface/port/ports.go	/^type RequestClassifier interface {$/;"	i	package:port
+Resolve	docs/usecase-flows.md	/^## Resolve$/;"	s	chapter:Usecase Flows
 Resolve	internal/usecase/service.go	/^func (s *Service) Resolve(ctx context.Context, input ResolveInput) (ResolveOutput, error) {$/;"	f	struct:usecase.Service	typeref:typename:(ResolveOutput, error)
 ResolveInput	internal/usecase/service.go	/^type ResolveInput struct {$/;"	s	package:usecase
 ResolveOutput	internal/usecase/service.go	/^type ResolveOutput struct {$/;"	s	package:usecase
 RoundTrip	internal/adapter/gateway/metadata_test.go	/^func (f roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) {$/;"	f	type:gateway.roundTripFunc	typeref:typename:(*http.Response, error)
 Run Locally	README.md	/^## Run Locally$/;"	s	chapter:umiurl
+Schema Change Rules	docs/database-tables.md	/^## Schema Change Rules$/;"	s	chapter:Database Tables
 Security & Configuration Tips	AGENTS.md	/^## Security & Configuration Tips$/;"	s	chapter:Repository Guidelines
 Service	internal/usecase/service.go	/^type Service struct {$/;"	s	package:usecase
+Shared Rules	docs/usecase-flows.md	/^## Shared Rules$/;"	s	chapter:Usecase Flows
+ShortURL	docs/data-models.md	/^## ShortURL$/;"	s	chapter:Data Models
 ShortURL	internal/controller/controller.go	/^	ShortURL     string          `json:"short_url"`$/;"	m	struct:controller.createURLResponse	typeref:typename:string
 ShortURL	internal/domain/models.go	/^type ShortURL struct {$/;"	s	package:domain
 ShortURL	internal/usecase/service.go	/^	ShortURL  domain.ShortURL$/;"	m	struct:usecase.ResolveOutput	typeref:typename:domain.ShortURL
@@ -253,6 +282,7 @@ Summary	internal/usecase/interface/repository/repositories.go	/^	Summary(ctx con
 Summary	internal/usecase/service_test.go	/^func (r *memoryRepo) Summary(_ context.Context, code string) (domain.AnalyticsSummary, bool, err/;"	f	struct:usecase.memoryRepo	typeref:typename:(domain.AnalyticsSummary, bool, error)
 TestBase62CodeGeneratorGenerate	internal/adapter/gateway/base62_test.go	/^func TestBase62CodeGeneratorGenerate(t *testing.T) {$/;"	f	package:gateway
 TestCreateShortURL	internal/controller/controller_test.go	/^func TestCreateShortURL(t *testing.T) {$/;"	f	package:controller
+TestCreateShortURLFallsBackWhenMetadataFetchFails	internal/usecase/service_test.go	/^func TestCreateShortURLFallsBackWhenMetadataFetchFails(t *testing.T) {$/;"	f	package:usecase
 TestCreateShortURLRejectsInvalidURL	internal/usecase/service_test.go	/^func TestCreateShortURLRejectsInvalidURL(t *testing.T) {$/;"	f	package:usecase
 TestCreateShortURLRetriesDuplicateCode	internal/usecase/service_test.go	/^func TestCreateShortURLRetriesDuplicateCode(t *testing.T) {$/;"	f	package:usecase
 TestHTTPMetadataFetcherFallsBackToStandardHTMLTags	internal/adapter/gateway/metadata_test.go	/^func TestHTTPMetadataFetcherFallsBackToStandardHTMLTags(t *testing.T) {$/;"	f	package:gateway
@@ -278,6 +308,8 @@ UpdatePreview	internal/controller/controller_test.go	/^func (r *controllerMemory
 UpdatePreview	internal/usecase/interface/repository/repositories.go	/^	UpdatePreview(ctx context.Context, id int64, preview domain.PreviewMetadata, updatedAt time.Tim/;"	n	interface:repository.ShortURLRepository	typeref:typename:error
 UpdatePreview	internal/usecase/service_test.go	/^func (r *memoryRepo) UpdatePreview(_ context.Context, id int64, preview domain.PreviewMetadata, /;"	f	struct:usecase.memoryRepo	typeref:typename:error
 UpdatedAt	internal/domain/models.go	/^	UpdatedAt    time.Time$/;"	m	struct:domain.ShortURL	typeref:typename:time.Time
+Usecase Flows	docs/usecase-flows.md	/^# Usecase Flows$/;"	c
+User and API Scenarios	docs/architecture.md	/^## User and API Scenarios$/;"	s	chapter:Architecture and Business Guide
 UserAgent	internal/domain/models.go	/^	UserAgent    string$/;"	m	struct:domain.ClickEvent	typeref:typename:string
 UserAgent	internal/usecase/service.go	/^	UserAgent string$/;"	m	struct:usecase.ResolveInput	typeref:typename:string
 Value	internal/controller/controller.go	/^	Value        float64 `json:"value"`$/;"	m	struct:controller.conversionRequest	typeref:typename:float64
@@ -294,6 +326,7 @@ campaign	migrations/001_init.sql	/^    campaign TEXT NOT NULL DEFAULT '',$/;"	E	
 campaign	migrations/001_init.sql	/^    campaign TEXT NOT NULL DEFAULT '',$/;"	E	table:conversion_events
 campaign	migrations/001_init.sql	/^    campaign TEXT NOT NULL DEFAULT '',$/;"	E	table:short_urls
 classifier	internal/usecase/service.go	/^	classifier  port.RequestClassifier$/;"	m	struct:usecase.Service	typeref:typename:port.RequestClassifier
+click_events	docs/database-tables.md	/^## click_events$/;"	s	chapter:Database Tables
 click_events	migrations/001_init.sql	/^CREATE TABLE IF NOT EXISTS click_events ($/;"	t
 clicks	internal/controller/controller_test.go	/^	clicks []domain.ClickEvent$/;"	m	struct:controller.controllerMemoryRepo	typeref:typename:[]domain.ClickEvent
 clicks	internal/usecase/service.go	/^	clicks      repository.ClickRepository$/;"	m	struct:usecase.Service	typeref:typename:repository.ClickRepository
@@ -311,6 +344,7 @@ controllerCodeGenerator	internal/controller/controller_test.go	/^type controller
 controllerMemoryRepo	internal/controller/controller_test.go	/^type controllerMemoryRepo struct {$/;"	s	package:controller
 controllerMetadata	internal/controller/controller_test.go	/^type controllerMetadata struct{}$/;"	s	package:controller
 conversionRequest	internal/controller/controller.go	/^type conversionRequest struct {$/;"	s	package:controller
+conversion_events	docs/database-tables.md	/^## conversion_events$/;"	s	chapter:Database Tables
 conversion_events	migrations/001_init.sql	/^CREATE TABLE IF NOT EXISTS conversion_events ($/;"	t
 conversions	internal/usecase/service.go	/^	conversions repository.ConversionRepository$/;"	m	struct:usecase.Service	typeref:typename:repository.ConversionRepository
 conversions	internal/usecase/service_test.go	/^	conversions    []domain.ConversionEvent$/;"	m	struct:usecase.memoryRepo	typeref:typename:[]domain.ConversionEvent
@@ -354,6 +388,7 @@ next	internal/usecase/service_test.go	/^	next  int$/;"	m	struct:usecase.sequence
 occurred_at	migrations/001_init.sql	/^    occurred_at TIMESTAMPTZ NOT NULL$/;"	E	table:click_events
 occurred_at	migrations/001_init.sql	/^    occurred_at TIMESTAMPTZ NOT NULL$/;"	E	table:conversion_events
 original_url	migrations/001_init.sql	/^    original_url TEXT NOT NULL,$/;"	E	table:short_urls
+parseCSVEnv	cmd/api/main.go	/^func parseCSVEnv(key string, fallback []string) []string {$/;"	f	package:main	typeref:typename:[]string
 parsePreviewMetadata	internal/adapter/gateway/metadata.go	/^func parsePreviewMetadata(rawURL string, reader io.Reader) (domain.PreviewMetadata, error) {$/;"	f	package:gateway	typeref:typename:(domain.PreviewMetadata, error)
 pgrepository	pkg/registry/registry.go	/^	pgrepository "umiurl\/internal\/adapter\/repository"$/;"	P	package:umiurl/internal/adapter/repository
 platform	migrations/001_init.sql	/^    platform TEXT NOT NULL DEFAULT '',$/;"	E	table:click_events
@@ -381,6 +416,7 @@ service	internal/controller/controller.go	/^	service *usecase.Service$/;"	m	stru
 shortURLs	internal/usecase/service.go	/^	shortURLs   repository.ShortURLRepository$/;"	m	struct:usecase.Service	typeref:typename:repository.ShortURLRepository
 short_url_id	migrations/001_init.sql	/^    short_url_id BIGINT NOT NULL REFERENCES short_urls(id) ON DELETE CASCADE,$/;"	E	table:click_events
 short_url_id	migrations/001_init.sql	/^    short_url_id BIGINT NOT NULL REFERENCES short_urls(id) ON DELETE CASCADE,$/;"	E	table:conversion_events
+short_urls	docs/database-tables.md	/^## short_urls$/;"	s	chapter:Database Tables
 short_urls	migrations/001_init.sql	/^CREATE TABLE IF NOT EXISTS short_urls ($/;"	t
 start	Makefile	/^start:$/;"	t
 staticMetadata	internal/usecase/service_test.go	/^type staticMetadata struct {$/;"	s	package:usecase

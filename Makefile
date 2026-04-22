@@ -12,6 +12,13 @@ start:
 test:
 	GOCACHE="$(GOCACHE)" go test ./...
 
+test-cov:
+	go test -v -count 1 \
+		-cover -covermode=count -coverpkg=./... \
+		-coverprofile=coverage.out \
+		./...
+	gcov2lcov -infile=coverage.out -outfile=lcov.info
+
 build:
 	GOCACHE="$(GOCACHE)" go build ./...
 
