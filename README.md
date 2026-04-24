@@ -122,11 +122,18 @@ make swagger
 
 New contributors should start with [Architecture and Business Guide](docs/architecture.md). For deeper details, read [Data Models](docs/data-models.md), [Database Tables](docs/database-tables.md), and [Usecase Flows](docs/usecase-flows.md).
 
+## Assignment Checklist
+
+- Short URL generation and redirect: `POST /urls`, `GET /{code}`
+- Social link preview: crawler-aware `GET /{code}` returns OG HTML
+- Referral tracking: `referral_code` and `campaign` are stored on short URLs and copied to click/conversion events
+- Analytics and attribution: `GET /urls/{code}/analytics`
+- Conversion attribution: `POST /conversions`
+- Local runnable setup: Docker Compose, migration, Makefile, and README commands
+
 ## Development
 
 ```sh
 go mod tidy
 go test ./...
-go test -race ./...
-go build ./...
 ```

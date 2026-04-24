@@ -15,29 +15,12 @@ type ContextKey string
 
 var swiss *testswiss.TestSwiss
 
-func SetEnv() func() {
-	if os.Getenv("DATABASE_URL") == "" {
-		os.Setenv("DATABASE_URL", "postgres://umiurl:umiurl@localhost:5433/umiurl?sslmode=disable")
-	}
-	// os.Setenv("SES_SEND_FROM", "noreply@aca5o.com")
-	// os.Setenv("FORGET_PASSWORD_ATTEMPT_COUNT", "1")
-	return func() {
-		os.Unsetenv("DATABASE_URL")
-		// os.Unsetenv("SES_SEND_FROM")
-		// os.Unsetenv("FORGET_PASSWORD_ATTEMPT_COUNT")
-	}
-
-}
-
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	shorturl.InitializeShortUrlScenario(ctx, swiss)
 }
 
 func InitializeSuite(ctx *godog.TestSuiteContext) {
-	var teardown func()
 	ctx.BeforeSuite(func() {
-		teardown = SetEnv()
-		// logger.SetupLogger(utils.FromEnv("LOG_LEVEL"))
 		swiss = testswiss.NewTestSwiss()
 		resetDb()
 	})
@@ -54,13 +37,13 @@ func InitializeSuite(ctx *godog.TestSuiteContext) {
 			return ctx, nil
 		},
 	)
-
-	ctx.AfterSuite(func() {
-		teardown()
-	})
 }
 
 func TestFeatures(t *testing.T) {
+	if os.Getenv("RUN_INTEGRATION_TESTS") != "1" {
+		t.Skip("integration tests are disabled; set RUN_INTEGRATION_TESTS=1 and TEST_DATABASE_URL to enable them")
+	}
+
 	suite := godog.TestSuite{
 		TestSuiteInitializer: InitializeSuite,
 		ScenarioInitializer:  InitializeScenario,

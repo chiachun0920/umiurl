@@ -1,4 +1,5 @@
 DATABASE_URL ?= postgres://umiurl:umiurl@localhost:5433/umiurl?sslmode=disable
+TEST_DATABASE_URL ?=
 APP_BASE_URL ?=  https://b732eaa7dbc0.ngrok.app
 PORT ?= 8080
 CORS_ALLOW_ORIGINS ?= *
@@ -10,14 +11,14 @@ start:
 	DATABASE_URL="$(DATABASE_URL)" APP_BASE_URL="$(APP_BASE_URL)" PORT="$(PORT)" CORS_ALLOW_ORIGINS="$(CORS_ALLOW_ORIGINS)" GOCACHE="$(GOCACHE)" go run ./cmd/api
 
 test-integration:
-	go test -v -count 1 \
+	RUN_INTEGRATION_TESTS=1 TEST_DATABASE_URL="$(TEST_DATABASE_URL)" GOCACHE="$(GOCACHE)" go test -v -count 1 \
 		-cover -covermode=count -coverpkg=./... \
 		-coverprofile=coverage.out \
 		./testing/integration
 	gcov2lcov -infile=coverage.out -outfile=lcov.info
 
 test:
-	go test -v -count 1 \
+	GOCACHE="$(GOCACHE)" go test -v -count 1 \
 		-cover -covermode=count -coverpkg=./... \
 		-coverprofile=coverage.out \
 		./...

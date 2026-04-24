@@ -3,9 +3,11 @@ package integration
 import (
 	"context"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -17,8 +19,10 @@ CREATE SCHEMA public;
 
 func resetDb() {
 	ctx := context.Background()
+	dbURL := databaseURL()
+	validateTestDatabaseURL(dbURL)
 
-	conn, err := pgx.Connect(ctx, databaseURL())
+	conn, err := pgx.Connect(ctx, dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,8 +45,10 @@ func resetDb() {
 
 func truncateDb() {
 	ctx := context.Background()
+	dbURL := databaseURL()
+	validateTestDatabaseURL(dbURL)
 
-	conn, err := pgx.Connect(ctx, databaseURL())
+	conn, err := pgx.Connect(ctx, dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,11 +61,11 @@ func truncateDb() {
 }
 
 func databaseURL() string {
-	if databaseURL := os.Getenv("DATABASE_URL"); databaseURL != "" {
+	if databaseURL := os.Getenv("TEST_DATABASE_URL"); databaseURL != "" {
 		return databaseURL
 	}
-
-	return "postgres://umiurl:umiurl@localhost:5433/umiurl?sslmode=disable"
+	log.Fatal("TEST_DATABASE_URL is required for integration tests")
+	return ""
 }
 
 func migrationPath() string {
@@ -69,4 +75,23 @@ func migrationPath() string {
 	}
 
 	return filepath.Join(filepath.Dir(file), "..", "..", "migrations", "001_init.sql")
+}
+func validateTestDatabaseURL(rawURL string) {
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		log.Fatalf("parse TEST_DATABASE_URL: %v", err)
+	}
+
+	host := parsed.Hostname()
+	if host != "localhost" && host != "127.0.0.1" {
+		log.Fatalf("refusing to reset non-local integration database host %q", host)
+	}
+
+	dbName := strings.TrimPrefix(parsed.Path, "/")
+	if dbName == "" {
+		log.Fatal("TEST_DATABASE_URL must include a database name")
+	}
+	if !strings.Contains(strings.ToLower(dbName), "test") && !strings.Contains(strings.ToLower(dbName), "integration") {
+		log.Fatalf("refusing to reset database %q; use a dedicated test or integration database name", dbName)
+	}
 }

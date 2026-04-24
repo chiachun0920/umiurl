@@ -26,7 +26,7 @@ Key terms:
 
 See the machine-readable API contract in [openapi.yaml](openapi.yaml).
 
-For deeper implementation details, see [Data Models](data-models.md), [Database Tables](database-tables.md), and [Usecase Flows](usecase-flows.md).
+For deeper implementation details, see [Data Models](data-models.md), [Database Tables](database-tables.md), [Usecase Flows](usecase-flows.md), and [System Design](system-design.md).
 
 ## Architecture Overview
 
