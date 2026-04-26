@@ -20,6 +20,7 @@ type TestSwiss struct {
 	Controller *controller.Controller
 	EchoServer *echo.Echo
 	TearDown   func()
+	Repo       *repository.PostgresRepository
 }
 
 func NewPool() *pgxpool.Pool {
@@ -42,6 +43,7 @@ func NewTestSwiss() *TestSwiss {
 	service := usecase.NewService(usecase.NewServiceInput{
 		ShortURLs:  repo,
 		Clicks:     repo,
+		Analytics:  repo,
 		Metadata:   NewMockMetadataFetcher(),
 		Codes:      gateway.NewBase62CodeGenerator(7),
 		Clock:      gateway.RealClock{},
@@ -56,6 +58,7 @@ func NewTestSwiss() *TestSwiss {
 		TearDown: func() {
 			pool.Close()
 		},
+		Repo: repo,
 	}
 	return swiss
 }

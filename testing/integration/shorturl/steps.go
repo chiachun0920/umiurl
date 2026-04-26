@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"umiurl/internal/controller"
+	"umiurl/internal/domain"
 
 	"github.com/labstack/echo/v4"
 )
@@ -97,6 +98,93 @@ func (shortUrlSfn *ShortUrlStepFunc) iShouldReceiveAnErrorMessage(
 	fmt.Println(errResp)
 	if errResp["error"] != expectedMessage {
 		return ctx, fmt.Errorf("error message = %s, want %s", errResp["error"], expectedMessage)
+	}
+
+	return ctx, nil
+}
+
+func (shortUrlSfn *ShortUrlStepFunc) aShortUrlExistsForWithCode(
+	ctx context.Context,
+	originalURL string,
+	code string,
+) (context.Context, error) {
+	shortUrlSfn.Swiss.Repo.Create(ctx, domain.ShortURL{
+		Code:        code,
+		OriginalURL: originalURL,
+	})
+
+	return ctx, nil
+}
+
+func (shortUrlSfn *ShortUrlStepFunc) iViewTheAnalyticsForTheShortUrlWithCode(
+	ctx context.Context,
+	code string,
+) (context.Context, error) {
+	httpreq := httptest.NewRequest(http.MethodGet, "/urls/"+code+"/analytics", nil)
+	rec := httptest.NewRecorder()
+	shortUrlSfn.Swiss.EchoServer.ServeHTTP(rec, httpreq)
+
+	ctx = context.WithValue(ctx, statusCodeCtxKey, rec.Code)
+	ctx = context.WithValue(ctx, responseCtxKey, rec.Body.String())
+
+	return ctx, nil
+}
+
+func (shortUrlSfn *ShortUrlStepFunc) iShouldReceiveAnalyticsDataForTheShortUrlWithCode(
+	ctx context.Context,
+	code string,
+) (context.Context, error) {
+	if ctx.Value(statusCodeCtxKey) != http.StatusOK {
+		return ctx, fmt.Errorf("status = %d, body = %s", ctx.Value(statusCodeCtxKey), ctx.Value(responseCtxKey))
+	}
+
+	fmt.Println("-->", ctx.Value(responseCtxKey).(string))
+	var summary domain.AnalyticsSummary
+	if err := json.Unmarshal([]byte(ctx.Value(responseCtxKey).(string)), &summary); err != nil {
+		return ctx, fmt.Errorf("decode response: %v", err)
+	}
+
+	if summary.Code != code {
+		return ctx, fmt.Errorf("analytics code = %s, want %s", summary.Code, code)
+	}
+
+	return ctx, nil
+}
+
+func (shortUrlSfn *ShortUrlStepFunc) iVisitTheShortUrlWithCode(
+	ctx context.Context,
+	code string,
+) (context.Context, error) {
+	httpreq := httptest.NewRequest(http.MethodGet, "/"+code, nil)
+	rec := httptest.NewRecorder()
+	shortUrlSfn.Swiss.EchoServer.ServeHTTP(rec, httpreq)
+
+	if rec.Code != http.StatusFound {
+		return ctx, fmt.Errorf("status = %d, body = %s", rec.Code, rec.Body.String())
+	}
+
+	return ctx, nil
+}
+
+func (shortUrlSfn *ShortUrlStepFunc) iShouldReceiveAnalyticsDataForTheShortUrlWithCodeWithVisit(
+	ctx context.Context,
+	code string,
+	expectedVisit int,
+) (context.Context, error) {
+	if ctx.Value(statusCodeCtxKey) != http.StatusOK {
+		return ctx, fmt.Errorf("status = %d, body = %s", ctx.Value(statusCodeCtxKey), ctx.Value(responseCtxKey))
+	}
+
+	var summary domain.AnalyticsSummary
+	if err := json.Unmarshal([]byte(ctx.Value(responseCtxKey).(string)), &summary); err != nil {
+		return ctx, fmt.Errorf("decode response: %v", err)
+	}
+
+	if summary.Code != code {
+		return ctx, fmt.Errorf("analytics code = %s, want %s", summary.Code, code)
+	}
+	if summary.TotalClicks != int64(expectedVisit) {
+		return ctx, fmt.Errorf("total clicks = %d, want %d", summary.TotalClicks, expectedVisit)
 	}
 
 	return ctx, nil

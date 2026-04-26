@@ -28,4 +28,9 @@ func InitializeShortUrlScenario(ctx *godog.ScenarioContext, swiss *testswiss.Tes
 	ctx.Step(`^I should receive a short url$`, sfh.iShouldReceiveAShortUrl)
 	ctx.Step(`^the short url should redirect to "([^"]*)"$`, sfh.theShortUrlShouldRedirectTo)
 	ctx.Step(`^I should receive an error message "([^"]*)"$`, sfh.iShouldReceiveAnErrorMessage)
+	ctx.Step(`^a short url exists for "([^"]*)" with code "([^"]*)"$`, sfh.aShortUrlExistsForWithCode)
+	ctx.Step(`^I view the analytics for the short url with code "([^"]*)"$`, sfh.iViewTheAnalyticsForTheShortUrlWithCode)
+	ctx.Step(`^I should receive analytics data for the short url with code "([^"]*)"$`, sfh.iShouldReceiveAnalyticsDataForTheShortUrlWithCode)
+	ctx.Step(`^I should receive analytics data for the short url with code "([^"]*)" with (\d+) visit$`, sfh.iShouldReceiveAnalyticsDataForTheShortUrlWithCodeWithVisit)
+	ctx.Step(`^I visit the short url with code "([^"]*)"$`, sfh.iVisitTheShortUrlWithCode)
 }
