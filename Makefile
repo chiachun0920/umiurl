@@ -1,5 +1,5 @@
 DATABASE_URL ?= postgres://umiurl:umiurl@localhost:5433/umiurl?sslmode=disable
-TEST_DATABASE_URL ?=
+TEST_DATABASE_URL ?= postgres://umiurl:umiurl@localhost:5433/umiurl_test?sslmode=disable
 APP_BASE_URL ?=  https://b732eaa7dbc0.ngrok.app
 PORT ?= 8080
 CORS_ALLOW_ORIGINS ?= *

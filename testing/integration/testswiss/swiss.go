@@ -23,9 +23,9 @@ type TestSwiss struct {
 }
 
 func NewPool() *pgxpool.Pool {
-	databaseURL := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("TEST_DATABASE_URL")
 	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is required")
+		log.Fatal("TEST_DATABASE_URL is required")
 	}
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
