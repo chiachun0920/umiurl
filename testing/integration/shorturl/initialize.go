@@ -26,4 +26,6 @@ func InitializeShortUrlScenario(ctx *godog.ScenarioContext, swiss *testswiss.Tes
 
 	ctx.Step(`^I create a short url with "([^"]*)"$`, sfh.iCreateAShortUrlWith)
 	ctx.Step(`^I should receive a short url$`, sfh.iShouldReceiveAShortUrl)
+	ctx.Step(`^the short url should redirect to "([^"]*)"$`, sfh.theShortUrlShouldRedirectTo)
+	ctx.Step(`^I should receive an error message "([^"]*)"$`, sfh.iShouldReceiveAnErrorMessage)
 }

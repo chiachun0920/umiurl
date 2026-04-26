@@ -40,10 +40,12 @@ func NewTestSwiss() *TestSwiss {
 	pool := NewPool()
 	repo := repository.NewPostgresRepository(pool)
 	service := usecase.NewService(usecase.NewServiceInput{
-		ShortURLs: repo,
-		Metadata:  NewMockMetadataFetcher(),
-		Codes:     gateway.NewBase62CodeGenerator(7),
-		Clock:     gateway.RealClock{},
+		ShortURLs:  repo,
+		Clicks:     repo,
+		Metadata:   NewMockMetadataFetcher(),
+		Codes:      gateway.NewBase62CodeGenerator(7),
+		Clock:      gateway.RealClock{},
+		Classifier: gateway.SimpleRequestClassifier{},
 	})
 
 	e := echo.New()
